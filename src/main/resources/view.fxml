@@ -26,7 +26,8 @@
                 </TextField>
                 <Button fx:id="calculateButton" mnemonicParsing="false" text="Calculate BMI" />
                 <Label fx:id="bmiLabel" text="Your bmi is: 0.0" />
-                <ChoiceBox fx:id="language" prefWidth="150.0" />
+            <Label fx:id="errorMessage" text="Error label" />
+                <ChoiceBox fx:id="languageSelect" prefWidth="150.0" />
             </children>
             <BorderPane.margin>
                 <Insets />
