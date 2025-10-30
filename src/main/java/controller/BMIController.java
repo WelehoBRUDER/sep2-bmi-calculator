@@ -1,16 +1,15 @@
 package controller;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 
 import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class BMIController {
     private final String[] languages = {"EN", "FR", "UR", "VI"};
     private String lang = languages[0];
+    private ResourceBundle rb = ResourceBundle.getBundle("Messages", new Locale("en", "US"));
 
     @FXML
     TextField weightField;
@@ -29,14 +28,13 @@ public class BMIController {
     @FXML
     Button calculateButton;
     @FXML
-    ChoiceBox<String> languageSelect;
+    ComboBox<String> languageSelect;
 
     double weight;
     double height;
-    double result;
+    double result = 0;
 
     public void initialize() {
-        errorMessage.setText("");
         createLanguageSelect();
         setLanguage();
         calculateButton.setOnAction(event -> {
@@ -50,6 +48,10 @@ public class BMIController {
     }
 
     public void validateValues() {
+        if (weightField.getText().isEmpty() || heightField.getText().isEmpty()) {
+            errorMessage.setText("");
+            return;
+        }
         try {
             weight = Double.parseDouble(weightField.getText());
             height = Double.parseDouble(heightField.getText());
@@ -57,13 +59,17 @@ public class BMIController {
             displayResult();
             errorMessage.setText("");
         } catch (Exception e) {
-            errorMessage.setText("invalid_weight_or_height");
+            errorMessage.setText(rb.getString("errorMessage.text"));
         }
     }
 
     public void displayResult() {
-        String text = "bmi_text: ";
-        bmiLabel.setText(text + String.format("%.2f", result));
+        String text = rb.getString("bmiLabel.text") + ": ";
+        if (result != 0) {
+            bmiLabel.setText(text + String.format("%.2f", result));
+        } else {
+            bmiLabel.setText(text);
+        }
     }
 
     public void createLanguageSelect() {
@@ -73,6 +79,7 @@ public class BMIController {
 
         languageSelect.setOnAction(event -> {
             lang = languageSelect.getSelectionModel().getSelectedItem();
+            System.out.println(lang);
             setLanguage();
         });
     }
@@ -80,13 +87,28 @@ public class BMIController {
     public void setLanguage() {
         switch (lang) {
             case "EN":
-                Locale locale = new Locale("en-US");
+                rb = ResourceBundle.getBundle("Messages", new Locale("en", "us"));
+                break;
             case "FR":
-                locale = new Locale("fr-FR");
+                rb = ResourceBundle.getBundle("Messages", new Locale("fr", "FR"));
+                break;
             case "UR":
-                locale = new Locale("ur-UR");
+                rb = ResourceBundle.getBundle("Messages", new Locale("ur", "PK"));
+                break;
             case "VI":
-                locale = new Locale("vi-VN");
+                rb = ResourceBundle.getBundle("Messages", new Locale("vi", "VN"));
+                break;
         }
+        updateAllTexts();
+    }
+
+    private void updateAllTexts() {
+        weightLabel.setText(rb.getString("weightLabel.text"));
+        heightLabel.setText(rb.getString("heightLabel.text"));
+        bmiLabel.setText(rb.getString("bmiLabel.text"));
+        calculateButton.setText(rb.getString("calculateButton.text"));
+        errorMessage.setText("");
+        validateValues();
+        displayResult();
     }
 }
