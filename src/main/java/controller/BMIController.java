@@ -6,6 +6,8 @@ import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
+import java.util.Locale;
+
 public class BMIController {
     private final String[] languages = {"EN", "FR", "UR", "VI"};
     private String lang = languages[0];
@@ -36,6 +38,7 @@ public class BMIController {
     public void initialize() {
         errorMessage.setText("");
         createLanguageSelect();
+        setLanguage();
         calculateButton.setOnAction(event -> {
             validateValues();
         });
@@ -53,8 +56,7 @@ public class BMIController {
             result = calculateBMI();
             displayResult();
             errorMessage.setText("");
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             errorMessage.setText("invalid_weight_or_height");
         }
     }
@@ -68,9 +70,23 @@ public class BMIController {
         languageSelect.getItems().clear();
         languageSelect.getItems().addAll(languages);
         languageSelect.getSelectionModel().selectFirst();
+
+        languageSelect.setOnAction(event -> {
+            lang = languageSelect.getSelectionModel().getSelectedItem();
+            setLanguage();
+        });
     }
 
-    public void setLanguage(String language) {
-
+    public void setLanguage() {
+        switch (lang) {
+            case "EN":
+                Locale locale = new Locale("en-US");
+            case "FR":
+                locale = new Locale("fr-FR");
+            case "UR":
+                locale = new Locale("ur-UR");
+            case "VI":
+                locale = new Locale("vi-VN");
+        }
     }
 }
