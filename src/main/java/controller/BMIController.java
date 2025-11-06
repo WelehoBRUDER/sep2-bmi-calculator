@@ -73,21 +73,21 @@ public class BMIController {
             DecimalFormat df = new DecimalFormat("#0.00");
             bmiLabel.setText(localizedStrings.getOrDefault("result", "Your BMI is") + " " + df.format(result));
             // Save to database
-            String language = Locale.getDefault().getLanguage(); // or store current locale
+            String language = lang.getCode();
             BMIResultService.saveResult(weight, height, result, language);
             displayResult();
             errorMessage.setText("");
         } catch (Exception e) {
-            //errorMessage.setText(rb.getString("errorMessage.text"));
+            errorMessage.setText(localizedStrings.getOrDefault("invalid", "Invalid value"));
         }
     }
 
     public void displayResult() {
-        //String text = rb.getString("bmiLabel.text") + ": ";
+        String text = localizedStrings.getOrDefault("result", "Your BMI is: ");
         if (result != 0) {
-            //bmiLabel.setText(text + String.format("%.2f", result));
+            bmiLabel.setText(text + String.format("%.2f", result));
         } else {
-            //bmiLabel.setText(text);
+            bmiLabel.setText(text);
         }
     }
 
@@ -102,16 +102,5 @@ public class BMIController {
             setLanguage(new Locale(lang.getCode(), lang.getCountry()));
         });
     }
-
-//    private void updateAllTexts() {
-//        localizedStrings = LocalizationService.getLocalizedStrings(locale);
-//        weightLabel.setText(rb.getString("weightLabel.text"));
-//        heightLabel.setText(rb.getString("heightLabel.text"));
-//        bmiLabel.setText(rb.getString("bmiLabel.text"));
-//        calculateButton.setText(rb.getString("calculateButton.text"));
-//        errorMessage.setText("");
-//        validateValues();
-//        displayResult();
-//    }
 }
 
