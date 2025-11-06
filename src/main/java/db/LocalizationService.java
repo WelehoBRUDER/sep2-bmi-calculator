@@ -6,7 +6,7 @@ import java.util.Locale;
 import java.util.Map;
 
 public class LocalizationService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/bmi_localization";
+    private static final String DB_URL = "jdbc:mariadb://localhost:3306/bmi_localization";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
 

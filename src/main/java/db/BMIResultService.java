@@ -2,7 +2,7 @@ package db;
 
 import java.sql.*;
 public class BMIResultService {
-    private static final String DB_URL = "jdbc:mysql://localhost:3306/bmi_localization";
+    private static final String DB_URL = "jdbc:mariadb://localhost:3306/bmi_localization";
     private static final String DB_USER = "root";
     private static final String DB_PASSWORD = "root";
 
