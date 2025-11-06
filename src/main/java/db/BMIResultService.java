@@ -4,7 +4,7 @@ import java.sql.*;
 public class BMIResultService {
     private static final String DB_URL = "jdbc:mysql://localhost:3306/bmi_localization";
     private static final String DB_USER = "root";
-    private static final String DB_PASSWORD = "Test12";
+    private static final String DB_PASSWORD = "root";
 
     public static void saveResult(double weight, double height, double bmi, String language) {
         String query = "INSERT INTO bmi_results (weight, height, bmi, language) VALUES (?, ?, ?, ?)";
