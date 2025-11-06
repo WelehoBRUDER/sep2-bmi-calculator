@@ -1,15 +1,20 @@
 package controller;
 
+import db.BMIResultService;
+import db.LocalizationService;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 
+import java.text.DecimalFormat;
 import java.util.Locale;
+import java.util.Map;
 import java.util.ResourceBundle;
 
 public class BMIController {
     private final String[] languages = {"EN", "FR", "UR", "VI"};
     private String lang = languages[0];
     private ResourceBundle rb = ResourceBundle.getBundle("Messages", new Locale("en", "US"));
+    private Map<String, String> localizedStrings;
 
     @FXML
     TextField weightField;
@@ -34,6 +39,15 @@ public class BMIController {
     double height;
     double result = 0;
 
+    private void setLanguage(Locale locale) {
+        bmiLabel.setText("");
+        localizedStrings = LocalizationService.getLocalizedStrings(locale);
+        weightLabel.setText(localizedStrings.getOrDefault("weight", "Weight"));
+        heightLabel.setText(localizedStrings.getOrDefault("height", "Height"));
+        calculateButton.setText(localizedStrings.getOrDefault("calculate", "Calculate"));
+        //displayLocalTime(locale);
+    }
+
     public void initialize() {
         createLanguageSelect();
         setLanguage();
@@ -56,6 +70,11 @@ public class BMIController {
             weight = Double.parseDouble(weightField.getText());
             height = Double.parseDouble(heightField.getText());
             result = calculateBMI();
+            DecimalFormat df = new DecimalFormat("#0.00");
+            bmiLabel.setText(localizedStrings.getOrDefault("result", "Your BMI is") + " " + df.format(result));
+            // Save to database
+            String language = Locale.getDefault().getLanguage(); // or store current locale
+            BMIResultService.saveResult(weight, height, result, language);
             displayResult();
             errorMessage.setText("");
         } catch (Exception e) {
